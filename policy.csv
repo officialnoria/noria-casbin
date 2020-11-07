@@ -1,0 +1,22 @@
+p, admin, urls, read
+p, admin, urls, write
+p, staff, /accounts, read
+p, staff, /accounts, write
+p, staff, /houses, read
+p, staff, /condos, read
+p, staff, /condos, write
+p, owner, /houses, read
+p, owner, /houses, write
+p, owner, /balances, read
+p, user, /balances, read
+g, /balances, urls
+g, /accounts, urls
+g, /houses, urls
+g, /condos, urls
+g, uploadFile, urls
+g2, Luke, user
+g2, Leia, staff
+g2, Han, staff
+g2, Obi-Wan, owner
+g2, Yoda, admin
+g2, R2-D2, anonymous
