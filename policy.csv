@@ -6,7 +6,6 @@ p, staff, /houses, read
 p, staff, /condos, read
 p, staff, /condos, write
 p, owner, /houses, read
-p, owner, /houses, write
 p, owner, /balances, read
 p, user, /balances, read
 g, /balances, urls
