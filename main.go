@@ -10,31 +10,68 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	rules := [][] string {
-		{"admin", "urls", "read"},
-		{"admin", "urls", "write"},
+	rules := [][]string{
+		{"admin", "mutations"},
 
-		{"staff", "/accounts", "read"},
-		{"staff", "/accounts", "write"},
-		{"staff", "/houses", "read"},
-		{"staff", "/condos", "read"},
-		{"staff", "/condos", "write"},
+		{"staff", "createAccount"},
+		{"staff", "updateAccount"},
+		{"staff", "deleteAccount"},
+		{"staff", "createCondo"},
+		{"staff", "updateCondo"},
+		{"staff", "deleteCondo"},
+		{"staff", "createHouse"},
+		{"staff", "updateHouse"},
+		{"staff", "deleteHouse"},
 
-		{"owner", "/houses", "read"},
-		{"owner", "/balances", "read"},
+		{"owner", "houses"},
+		{"owner", "balances"},
 
-		{"user", "/balances", "read"},
+		{"user", "balances"},
 	}
-	_,_ = e.AddNamedPolicies("p", rules)
+	_, _ = e.AddNamedPolicies("p", rules)
 
-	domains := [][]string {
-		{"/balances", "urls"},
-		{"/accounts", "urls"},
-		{"/houses", "urls"},
-		{"/condos", "urls"},
-		{"uploadFile", "urls"},
+	mutations := [][]string {
+		{"createAcountant", "mutations"},
+		{"createAccount", "mutations"},
+		{"updateAccount", "mutations"},
+		{"deleteAccount", "mutations"},
+		{"createApplicationpayment", "mutations"},
+		{"updateApplicationpayment", "mutations"},
+		{"deleteApplicationpayment", "mutations"},
+		{"approvePayment", "mutations"},
+		{"createBalance", "mutations"},
+		{"updateBalance", "mutations"},
+		{"deleteBalance", "mutations"},
+		{"createCondo", "mutations"},
+		{"updateCondo", "mutations"},
+		{"deleteCondo", "mutations"},
+		{"createDiscount", "mutations"},
+		{"updateDiscount", "mutations"},
+		{"deleteDiscount", "mutations"},
+		{"createHouse", "mutations"},
+		{"updateHouse", "mutations"},
+		{"deleteHouse", "mutations"},
+		{"createProvider", "mutations"},
+		{"updateProvider", "mutations"},
+		{"deleteProvider", "mutations"},
+		{"updateUnrecognizeddeposit", "mutations"},
 	}
-	_,_ = e.AddNamedGroupingPolicies("g", domains)
+	_,_ = e.AddNamedGroupingPolicies("g", mutations)
+
+	queries := [][]string {
+		{"accounts", "queries"},
+		{"accountants", "queries"},
+		{"applicationpayments", "queries"},
+		{"balances", "queries"},
+		{"condos", "queries"},
+		{"deposits", "queries"},
+		{"discounts", "queries"},
+		{"expenses", "queries"},
+		{"houses", "queries"},
+		{"providers", "queries"},
+		{"unrecognizeddeposits", "queries"},
+	}
+	_,_ = e.AddNamedGroupingPolicies("g2", queries)
 
 	users := [][]string {
 		{"Luke", "user"},
@@ -42,34 +79,26 @@ func main() {
 		{"Han", "staff"},
 		{"Obi-Wan", "owner"},
 		{"Yoda", "admin"},
-		{"R2-D2", "anonymous"},
+		{"R2-D2", "admin"},
 	}
-	_,_ = e.AddNamedGroupingPolicies("g2", users)
+	_,_ = e.AddNamedGroupingPolicies("g3", users)
 	
-	hasPolicy,_ := e.Enforce("Leia", "uploadFile", "write") // false
-	fmt.Println("Leia", "uploadFile", "write", hasPolicy)
-	hasPolicy,_ = e.Enforce("Han", "uploadFile", "write") // false
-	fmt.Println("Han", "uploadFile", "write", hasPolicy)
-	hasPolicy,_ = e.Enforce("R2-D2", "/balances", "read") // false
-	fmt.Println("R2-D2", "/balances", "read", hasPolicy)
-	hasPolicy,_ = e.Enforce("Obi-Wan", "/houses", "read") // true
-	fmt.Println("Obi-Wan", "/houses", "read", hasPolicy)
-	hasPolicy,_ = e.Enforce("Leia", "/condos", "write") // true
-	fmt.Println("Leia", "/condos", "write", hasPolicy)
-	hasPolicy,_ = e.Enforce("Han", "/condos", "write") // true
-	fmt.Println("Han", "/condos", "write", hasPolicy)
-	hasPolicy,_ = e.Enforce("Luke", "/balances", "read") // true
-	fmt.Println("Luke", "/balances", "read", hasPolicy)
-	hasPolicy,_ = e.Enforce("R2-D2", "uploadFile", "write") // true
-	fmt.Println("R2-D2", "uploadFile", "write", hasPolicy)
-	hasPolicy,_ = e.Enforce("Obi-Wan", "/houses", "write") // false
-	fmt.Println("Obi-Wan", "/houses", "write", hasPolicy)
-	_,_ = e.AddNamedGroupingPolicy("g2", "Obi-Wan", "admin")
-	hasPolicy,_ = e.Enforce("Obi-Wan", "/houses", "write") // true
-	fmt.Println("Obi-Wan", "/houses", "write", hasPolicy)
-	_,_ = e.RemoveNamedGroupingPolicy("g2", "Leia")
-	hasPolicy,_ = e.Enforce("Leia", "/condo", "write") // false
-	fmt.Println("Leia", "/condos", "write", hasPolicy)
+	tests := [][]string {
+		{"Leia", "createApplicationpayment"},
+		{"Han", "createApplicationpayment"},
+		{"R2-D2", "balances"},
+		{"Obi-Wan", "houses"},
+		{"Leia", "createCondo"},
+		{"Han", "createCondo"},
+		{"Luke", "balances"},
+		{"R2-D2", "createApplicationpayment"},
+		{"Obi-Wan", "createHouse"},
+	}
+		
+	for _, v := range tests {
+		hasPolicy, _ := e.Enforce(v[0], v[1])
+		fmt.Println(v, hasPolicy)
+	}
 }
 
 // 1. Crear archivo de configuracion (.conf)
